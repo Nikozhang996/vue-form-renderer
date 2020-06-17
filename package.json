@@ -2,7 +2,7 @@
   "name": "vue-form-renderer",
   "version": "0.1.0",
   "private": true,
-  "description": "render form-item easily",
+  "description": "render el-form easily",
   "author": "NikoZhang <593177876@qq.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
