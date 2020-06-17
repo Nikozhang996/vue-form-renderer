@@ -1,6 +1,19 @@
 {
   "name": "vue-form-renderer",
   "version": "0.1.0",
+  "description": "render form-item easily",
+  "author": "NikoZhang <593177876@qq.com>",
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "form",
+    "element-ui",
+    "render"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nikozhang996/vue-form-renderer"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
