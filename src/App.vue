@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <form-renderer
+      class="form-renderer"
       ref="formRenderer"
       :field-scheme="formConfig"
       :field-rules="formRules"
@@ -15,7 +16,7 @@ export default {
   components: {
     FormRenderer
   },
-  data: function() {
+  data() {
     return {
       formRules: {
         categoryPid: [
@@ -35,38 +36,6 @@ export default {
       },
       formConfig: [
         [
-          {
-            type: "CASCADER_RENDERER",
-            key: "categoryPid",
-            label: "课类/阶段",
-            fieldProps: {
-              type: "COURSE_CATEGORY",
-              placeholder: "请选择课类/阶段",
-              props: {
-                emitPath: true
-              }
-            },
-            fieldEvent: {
-              input: async (context, value) => {
-                context.setFieldValueStatus({
-                  chapterNumberId: ""
-                });
-                const { code, data } = await this.$http.crm.post(
-                  "api/chapter/categoryChapter",
-                  {
-                    cateId: value[1]
-                  }
-                );
-                if (code === 200) {
-                  context.setFieldOptionStatus({
-                    chapterNumberId: data.map(({ chapterName, id }) => {
-                      return { value: chapterName, key: id };
-                    })
-                  });
-                }
-              }
-            }
-          },
           {
             type: "SELECT",
             key: "chapterNumberId",
@@ -140,3 +109,12 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.form-renderer {
+  width: 600px;
+  border: 1px solid red;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+}
+</style>

@@ -1,20 +1,9 @@
 {
   "name": "vue-form-renderer",
   "version": "0.1.0",
+  "private": true,
   "description": "render form-item easily",
   "author": "NikoZhang <593177876@qq.com>",
-  "license": "MIT",
-  "keywords": [
-    "vue",
-    "form",
-    "element-ui",
-    "render"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Nikozhang996/vue-form-renderer"
-  },
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -22,6 +11,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "element-ui": "^2.13.2",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -36,6 +26,7 @@
     "prettier": "^1.19.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "vue-cli-plugin-element-ui": "~1.1.4",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -57,5 +48,16 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "keywords": [
+    "vue",
+    "form",
+    "element-ui",
+    "render"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nikozhang996/vue-form-renderer"
+  }
 }
