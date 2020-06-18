@@ -1,4 +1,4 @@
-const path = require("path");
+// const path = require("path");
 
 module.exports = {
   configureWebpack: {
@@ -8,9 +8,9 @@ module.exports = {
     //   filename: "vue-form-renderer.js"
     // },
     externals: {
-      vue: "Vue",
-      "core-js": "core-js",
-      "element-ui": "ElementUI"
+      // vue: "Vue",
+      // "core-js": "core-js",
+      // "element-ui": "ElementUI"
     }
   }
 };
