@@ -1,6 +1,6 @@
 {
   "name": "vue-form-renderer",
-  "version": "1.0.0-1",
+  "version": "1.0.0",
   "description": "render el-form easily",
   "author": "NikoZhang <593177876@qq.com>",
   "scripts": {
@@ -8,9 +8,13 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name vue-form-renderer ./src/components/index.js"
-},
+  },
   "main": "./dist/vue-form-renderer.common.js",
-  "files": ["src", "dist", "yarn.lock"],
+  "files": [
+    "src",
+    "dist",
+    "yarn.lock"
+  ],
   "dependencies": {
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
