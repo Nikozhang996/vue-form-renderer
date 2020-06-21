@@ -11,6 +11,15 @@
 - 通过 context 提供的方法可以实现表单控件联动
 
 ### Quick Start
+```
+yarn install vue-form-renderer
+or
+npm install vue-form-renderer -S
+
+import VueFormRenderer from 'vue-form-renderer';
+Vue.use(VueFormRenderer);
+```
+
 ```html
 <template>
   <form-renderer
@@ -106,3 +115,4 @@
 
 
 ### License
+MIT
