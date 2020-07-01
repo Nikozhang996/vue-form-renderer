@@ -10,6 +10,11 @@
 - 属性和方法都继承自 element 原生
 - 通过 context 提供的方法可以实现表单控件联动
 
+### Link
+- [使用文档](https://github.com/Nikozhang996/vue-form-renderer/blob/master/docs/README.md)
+- [常见问题](https://github.com/Nikozhang996/vue-form-renderer/blob/master/docs/FAQ.md)
+ 
+
 ### Quick Start
 ```
 yarn install vue-form-renderer
@@ -116,4 +121,4 @@ Vue.use(VueFormRenderer);
 
 ### License
 
-[MIT License]()
+[MIT License](https://github.com/Nikozhang996/vue-form-renderer/blob/master/LICENSE)
