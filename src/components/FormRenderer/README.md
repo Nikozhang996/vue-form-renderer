@@ -1,246 +1,207 @@
-## FormRenderer——表单生成器
+## TableRenderer——表格生成器
 
-> form-renderer 是基于 el-form 上二次封装，集成表单常用控件（select,radio,cascder,input,input-number,switch,checkbox,rate,time-picker,date-picker）并与现有的 select-renderer 和 cascder-renderer 兼容。
->
-> 通过`form-scheme`配置快速生成模板，提高开发效率与减少业务层的代码冗余。
+> table-renderer 是基于 el-table 上二次封装，集成原有属性与方法。通过 JSONCOnfig 形式自动生成表格，减少 HTML 标签编写，提高开发效率的同时保证了代码的可读性。
 
 ### Feature
 
-- 通过简单的 JSON 配置即可自动生成表单状态
-- 集成常用的控件并与现有的 renderer 系列组件集成
+- 通过简单的 JSON 配置即可自动生成表格状态
 - 属性和方法都继承自 element 原生
-- 通过 context 提供的方法可以实现表单控件联动
+- 右侧操作栏也可自动生成
 
 ### Attributes
 
-|    参数     |           说明            |  类型  |                      可选值                      |         默认值         |
-| :---------: | :-----------------------: | :----: | :----------------------------------------------: | :--------------------: |
-| form-props  | 表单 el-form 所接收的属性 | Object | 接收规则与 el-form 原生 Form Attributes 属性相同 | {labelPosition: 'top'} |
-| form-rules  |       表单校验规则        | Array  |      接收规则与 el-form 原生 rules 属性相同      |           -            |
-| form-scheme |         表单配置          | Array  |                        -                         |           -            |
+|    参数     |      说明      |     类型     |               可选值               | 默认值 |
+| :---------: | :------------: | :----------: | :--------------------------------: | :----: |
+| data-source |   显示的数据   |    Array     | 与 el-table 中的原生 data 属性一致 |   -    |
+|   columns   |  显示字段配置  |    Array     |            columns 配置            |   -    |
+| action-bar  | 右侧操作栏配置 | Array/Object |                 -                  | Array  |
 
-#### form-scheme 配置
+#### columns 配置
 
-|    属性    |                   说明                    |  类型  |        可选值        | 默认值 |
-| :--------: | :---------------------------------------: | :----: | :------------------: | :----: |
-|    type    |            指定表单 field 类型            | String | 请看 type 可选值内容 | input  |
-|    key     | 设置 el-form-item 的 props 值（必须唯一） | String |                      |   -    |
-|   label    |       设置 el-form-item 的 label 值       | String |          -           |   -    |
-| fieldProps |        表单 field 所绑定的属性集合        | Object |          -           |   -    |
-| fieldEvent |        表单 field 所绑定的事件集合        | Object |          -           |   -    |
+实际上 columns 中的 item 是把每项属性都注入到 Table-column Attributes 中，所以这里只列出常用的配置项，具體可看 ElementUI 文档中的 Table-column Attributes
 
-fieldProps 和 fieldEvent 都会通过`{...{attrs: fieldProps}} {...{on: fieldEvent}}`继承到 field 组件中，所以 ElementUI 原生组件所接收的事件和方法都支持。下面写法是等价的
-
-所有 fieldEvent 中的方法内部都会被装饰器模式包装在原有回调参数上添加`context`，context 其实就是 FormRenderer 组件实例的`this`，所以可以通过 context 得到内部的所有 data 和 methods，这个思想是借鉴了 koa.js 中的中间件思路。
+|   属性    |     说明     |                  类型                   | 是否必填 | 默认值 |
+| :-------: | :----------: | :-------------------------------------: | :------: | :----: |
+|   prop    |   展示字段   |                 String                  |   true   |   -    |
+|   label   | 当前字段表头 |                 String                  |  false   |   -    |
+| formatter |  格式化函数  | Function(row, column, cellValue, index) |  false   |   -    |
 
 ```javascript
-<el-select value="10" filterable multiple placeholder="""请选择"/>
-
-const config = {
-type:'SELECT',
- key: "teacherId",
-label: "选择器",
- fieldProps: {
- value:10,
- multiple:true,
- filterable: true,
- placeholder: "请选择",
- }
- };
 ```
 
-#### form-scheme[type] 值映射表
+#### action-bar item 配置
 
-|       key        |                         说明                         |
-| :--------------: | :--------------------------------------------------: |
-|      select      |                 原生 el-select 下拉                  |
-|      radio       |                 原生 el-radio-group                  |
-|     cascder      |              原生 el-cascder 级联选择器              |
-|      input       |                原生 el-input 输入控件                |
-|   input-number   |                 原生 el-input-number                 |
-|      switch      |                    原生 el-switch                    |
-|     checkbox     |                 原生 el-select 下拉                  |
-|       rate       |                     原生 el-rate                     |
-|   time-picker    |              原生 el-time-picker 选择器              |
-|   date-picker    |              原生 el-date-picker 选择器              |
-| select-renderer  |  集成 select-renderer，具体请看 SelectRenderer 文档  |
-| cascder-renderer | 集成 cascder-renderer，具体请看 CascderRenderer 文档 |
+action-bar 默认为 Array 类型,灵活操作可以用 Object 状态。可看调用示例
+
+|  属性  |                  说明                  |     类型      | 是否必填 | 默认值 |
+| :----: | :------------------------------------: | :-----------: | :------: | :----: |
+| label  |               展示 label               |    String     |   true   |   -    |
+|  key   |              必须为唯一值              |    String     |   true   |   -    |
+| handle | 过滤函数,可由此控制 visible 或其他属性 | Function(row) |  false   |   -    |
+
+```javascript
+<table-renderer :action-bar="tableActionBar"/>
+
+tableActionBar = [
+  {
+    label: "按钮A",
+    key: "a",
+    handle: (row) => {
+      return {
+        visible: handler()
+      };
+    },
+  },
+  {
+    label: "按钮B",
+    key: "b",
+  },
+  {
+    label: "按钮C",
+    key: "c",
+  }
+];
+
+tableActionBar ={
+  isDropdown:false,
+  width:120,
+  buttons:[
+  {
+    label: "按钮A",
+    key: "a",
+  },
+  {
+    label: "按钮B",
+    key: "b",
+  },
+  {
+    label: "按钮C",
+    key: "c",
+  }
+]}
+```
 
 ### Events
 
-|   事件名称   |                              说明                               |            回调参数            |
-| :----------: | :-------------------------------------------------------------: | :----------------------------: |
-| form-change  | form 内容发生变更时触发（field-change 触发必定触发 form-change) | context, fieldValueMap<Object> |
-| field-change |                   form-item 值发生变更时触发                    |  context, fieldStats<Object>   |
+table-renderer 内部使用`v-on="$listeners"`继承了所有方法到 el-table 上,所以原生 el-table 支持的事件都可以直接绑定。当然我们也做了拓展,补充了`operation-click`方法。
 
-### methods
+|     事件名      |           说明           |     参数     |
+| :-------------: | :----------------------: | :----------: |
+| operation-click | 点击右侧操作栏按钮时触发 | key, { row } |
 
-|       方法名称       |                        说明                        |                        参数                        |
-| :------------------: | :------------------------------------------------: | :------------------------------------------------: |
-| setFieldValueStatus  |             设置 field 绑定的 value 值             |  {key:field 中指定的 key 值,value:<Any>:赋值新值}  |
-| setFieldPropsStatus  |             设置 field 绑定的 props 值             | {key:field 中指定的 key 值,value<Object>:赋值新值} |
-| setFieldOptionStatus |            设置 field 绑定的 option 值             | {key:field 中指定的 key 值,value<Array>:赋值新值}  |
-|  getFormValueStatus  | 获取表单内容，返回一个 Promise，内部会触发表单校验 |                         -                          |
+```javascript
+<table-renderer @operation-click="onTableOperationClick"/>
 
-### 调用示例
+async onTableOperationClick(key, { row }) {
+  this.currentRowData = row;
+  if (key === "a") {
+    // todo
+  }
+  if (key === "b") {
+    // todo
+  }
+  if (key === "c") {
+    // todo
+  }
+}
 
-```html
-<template>
-  <form-renderer
-    ref="formRenderer"
-    :field-scheme="formConfig"
-    :field-rules="formRules"
-  />
-</template>
-<script type="text/jsx">
-  export default {
-    name: 'RoomFormPanel',
-    props: {
-      roomId: {
-        type: [Number, String],
-        require: false
-      }
-    },
-    data() {
-      return {
-        currentUserData: {},
-        formRules: {
-          categoryPid: [
-            {required: true, message: '请选择课类/阶段', trigger: 'blur'}
-          ],
-          chapterNumberId: [
-            {required: true, message: '请选择课件', trigger: 'blur'}
-          ],
-          date: [
-            {required: true, message: '请选择上课日期', trigger: 'blur'}
-          ],
-          time: [
-            {required: true, message: '请选择上课时间', trigger: 'blur'}
-          ],
-          duration: [
-            {required: true, message: '请选择上课时长', trigger: 'blur'}
-          ],
-          teacherId: [
-            {required: true, message: '请选择活动区域', trigger: 'blur'}
-          ],
-        },
-        formConfig: [
-          [
-            {
-              type: 'CASCADER_RENDERER',
-              key: 'categoryPid',
-              label: '课类/阶段',
-              fieldProps: {
-                type: "COURSE_CATEGORY",
-                placeholder: "请选择课类/阶段",
-                props:{
-                  emitPath: true
-                }
-              },
-              fieldEvent: {
-                input: async (context, value) => {
-                  context.setFieldValueStatus({
-                    chapterNumberId: ""
-                  });
-                  const {code, data} = await this.$http.crm.post(
-                          "api/chapter/categoryChapter",
-                          {
-                            cateId: value[1]
-                          }
-                  );
-                  if (code === 200) {
-                    context.setFieldOptionStatus({
-                      chapterNumberId: data.map(({chapterName, id}) => {
-                        return {value: chapterName, key: id};
-                      })
-                    });
-                  }
-                }
-              }
-            },
-            {
-              type: 'SELECT',
-              key: "chapterNumberId",
-              label: '课件',
-              fieldProps: {
-                placeholder: "请选择课件",
-              },
-            }
-          ],
-          [
-            {
-              type: 'DATE_PICKER', key: "date", label: "上课日期",
-              fieldProps: {
-                "value-format": 'yyyy-MM-dd',
-                placeholder: "请选择上课日期",
-              }
-            },
-            {
-              type: 'TIME_PICKER', key: "time", label: "上课时间",
-              fieldProps: {
-                format: "HH:mm",
-                "value-format": 'HH:mm',
-                placeholder: "请选择上课时间",
-              }
-            }
-          ],
-          [
-            {
-              type: 'INPUT_NUMBER', key: "duration", label: "上课时长（分钟）",
-              fieldProps: {
-                value: 60,
-                min: 1,
-                controlsPosition: "right"
-              }
-            },
-            {
-              type: 'SELECT',
-              key: "teacherId",
-              label: "主讲人",
-              fieldProps: {
-                defaultInit: true,
-                filterable: true,
-                remote:true,
-                'remote-method': async value => {
-                  // http://docs.auth.wdsw.cn/v1/admindept/33b4658a819c77e185c0c5e03f94ef0f.html
-                  const {code, data} = await this.$http.auth.get('/v1/admins', {
-                    params: {
-                      search: value,
-                      __fields: 'nickname,id'
-                    }
-                  });
-                  code === 0 && this.$refs.formRenderer.setFieldOptionStatus({
-                    teacherId: data.map(item => ({key: item.id, value: item.nickname}))
-                  });
-                }
-              }
-            }
-          ],
-        ]
-      }
-    },
-    methods: {
-      /**
-       * 编辑时设置表单状态
-       * */
-      setFormData(data) {
-        this.$refs.formRenderer.setFieldValueStatus(data);
-      },
-      /**
-       * 获取表单value值
-       * */
-      getFormData() {
-        // return this.$refs.form.validate().then(() => this.formData)
-        return this.$refs.formRenderer.getFormValueStatus();
-      }
-    }
-  };
-</script>
 ```
 
-## 踩坑笔记
+### 完整调用示例
 
-- [使用 Vue Styleguidist 编写组件文档](https://www.jianshu.com/p/e6745ed87563)
-- [Component with model props throws error](https://github.com/vuejs/jsx/issues/49)
-- [Arguments 对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/arguments)
-- [JS 严格模式（use strict）下不能使用 arguments.callee 的替代方案](https://www.cnblogs.com/moqiutao/p/7509991.html)
+```html
+<table-renderer
+  height="100%"
+  :data-source="data"
+  :columns="tableColumns"
+  border
+  size="mini"
+  :dropdown="false"
+  @cell-click="handleCellClick"
+  :action-bar="tableActionBar"
+  @operation-click="onTableOperationClick"
+  v-on="$listeners"
+></table-renderer>
+```
+
+```javascript
+// 处理Cell点击事件
+async handleCellClick(row, column) {
+  this.currentRowData = row;
+  switch (column.property) {
+    case "relation": // 拨打外呼
+      this.isShow.outBound = true;
+      break;
+    case "ifTest": // 定级测评
+      if (row.ifTest) {
+        this.isShow.reportDetail = true;
+      }
+      break;
+    case "tmkConfirm": // 确认排课状态
+      this.isShow.scheduleProgress = true;
+      break;
+  }
+},
+
+tableColumns: [
+  {
+    label: "学员",
+    prop: "studentId",
+    minWidth: "180px",
+    fixed: "left",
+    formatter: row => {
+      return <UserFieldCell name={row.name} id={row.studentId} />;
+    }
+  },
+  { prop: "studentStatus", label: "状态" },
+  {
+    prop: "hoardingEndTime",
+    label: "囤课结束日期",
+    width: "120px",
+    sortable: "custom"
+  },
+  {
+    label: "家长",
+    prop: "relation",
+    width: "200px",
+    formatter: row => (
+      return row.a===1?true:false;
+    )
+  },
+  { prop: "attendClass", label: "年级", width: "100px" },
+]
+
+tableActionBar = [
+  {
+    label: "按钮A",
+    key: "a",
+    handle: (row) => {
+      return {
+        visible: handler()
+      };
+    },
+  },
+  {
+    label: "按钮B",
+    key: "b",
+  },
+  {
+    label: "按钮C",
+    key: "c",
+  }
+];
+
+async onTableOperationClick(key, { row }) {
+  this.currentRowData = row;
+  if (key === "a") {
+    // todo
+  }
+  if (key === "b") {
+    // todo
+  }
+  if (key === "c") {
+    // todo
+  }
+}
+
+```
