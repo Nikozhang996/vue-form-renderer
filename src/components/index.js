@@ -5,3 +5,10 @@ FormRenderer.install = function(Vue) {
 };
 
 export default FormRenderer;
+/*import TextHa from "./text";
+
+TextHa.install = function(Vue) {
+  Vue.component("text-ha", TextHa);
+};
+
+export default TextHa;*/

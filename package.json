@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name vue-form-renderer ./src/components/index.js"
   },
-  "main": "./dist/vue-form-renderer.common.js",
+  "main": "./dist/vue-form-renderer.umd.js",
   "files": [
     "src",
     "dist",

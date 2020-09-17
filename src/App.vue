@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import FormRenderer from "./components/FormRenderer";
+// import FormRenderer from "./components/FormRenderer";
 export default {
   name: "App",
-  components: {
-    FormRenderer
-  },
+  // components: {
+  //   FormRenderer
+  // },
   data() {
     return {
       formRules: {
