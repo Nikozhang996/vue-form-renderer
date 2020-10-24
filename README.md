@@ -27,7 +27,7 @@ Vue.use(VueFormRenderer);
 
 ```html
 <template>
-  <form-renderer
+  <vue-form-renderer
     ref="formRenderer"
     :field-scheme="formConfig"
     :field-rules="formRules"
